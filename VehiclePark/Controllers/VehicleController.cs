@@ -24,6 +24,7 @@ namespace VehiclePark.Controllers
         {
             var vehicles = await _vehicleService.GetAllVehicles();
 
+            // if the request send back a list of vehicles, return OK
             if (vehicles != null)
             {
                 return Ok(vehicles);
@@ -72,8 +73,10 @@ namespace VehiclePark.Controllers
         [Description("Validates a license plate")]
         public async Task<ActionResult> ValidateLicensePlate(int id)
         {
+            // sends the id to the service to validate the license plate
             var request = await _vehicleService.ValidateLicensePlate(id);
 
+            // if the request returns data, then the license plate is valid
             if (request)
             {
                 return Ok("License plate is valid");
