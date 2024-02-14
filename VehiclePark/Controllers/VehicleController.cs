@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using System.ComponentModel;
 using VehiclePark.Models;
 using VehiclePark.Services;
 
@@ -16,13 +18,25 @@ namespace VehiclePark.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllVehicles()
+        [Description("Gets all the vehicles")]
+        [EnableQuery]
+        public async Task<ActionResult<List<Vehicle>>> GetAllVehiclesAsync()
         {
-            return Ok("This works");
+            var vehicles = await _vehicleService.GetAllVehicles();
+
+            if (vehicles != null)
+            {
+                return Ok(vehicles);
+            }
+            else
+            {
+                return BadRequest("No vehicles found");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostDummyVehicles()
+        [Description("Posts dummy vehicles")]
+        public async Task<ActionResult> PostDummyVehicles()
         {
             var vehicles = await _vehicleService.PostDummyVehicles();
 
@@ -39,9 +53,10 @@ namespace VehiclePark.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateVehicle(int id, Vehicle vehicle)
+        [Description("Updates a vehicle")]
+        public async Task<ActionResult> UpdateVehicle(int id, [FromBody] Vehicle vehicle)
         {
-            var request = _vehicleService.UpdateVehicle(id, vehicle);
+            var request = await _vehicleService.UpdateVehicle(id, vehicle);
 
             if (request != null)
             {
