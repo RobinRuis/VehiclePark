@@ -4,8 +4,9 @@ namespace VehiclePark.Services
 {
     public interface IVehicleService
     {
-        Task<ICollection<Vehicle>> GetAllVehicles();
+        Task<List<Vehicle>> GetAllVehicles();
+        Task<List<Vehicle>> PostDummyVehicles();
         Task<Vehicle> UpdateVehicle(int id, Vehicle vehicle);
-        Task<Vehicle> ValidateLicensePlate(int id, string licensePlate);
+        Task<Vehicle> ValidateLicensePlate(int id, Vehicle vehicle);
     }
 }
