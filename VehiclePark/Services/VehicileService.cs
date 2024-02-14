@@ -50,6 +50,16 @@ namespace VehiclePark.Services
 
                             new Vehicle
                             {
+                                LicensePlate = "HV860J",
+                                Color = "Grey",
+                                BuildYear = 2016,
+                                LoanedTo = "Robin",
+                                Status = StatusOptions.Lentout,
+                                Comments = "This car is being lend"
+                            },
+
+                            new Vehicle
+                            {
                                 LicensePlate = "DS432X",
                                 Color = "Zwart",
                                 BuildYear = 2010,
