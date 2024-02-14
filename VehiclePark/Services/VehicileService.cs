@@ -16,6 +16,7 @@ namespace VehiclePark.Services
             _context = context;
         }
 
+        // gets all the vehicles from the database
         public async Task<List<Vehicle>> GetAllVehicles()
         {
             try {
@@ -29,6 +30,8 @@ namespace VehiclePark.Services
 
         public async Task<List<Vehicle>> PostDummyVehicles()
         {
+
+            // If the database is empty, add the vehicles
             if (_context.Vehicles.Count() == 0)
             {
                 try
@@ -42,7 +45,7 @@ namespace VehiclePark.Services
                                 BuildYear = 2016,
                                 LoanedTo = "",
                                 Status = StatusOptions.Sold,
-                                Comments = "This licence plate works, and is sold"
+                                Comments = "This licence plate is valid, and the car is sold"
                             },
 
                             new Vehicle
@@ -148,21 +151,26 @@ namespace VehiclePark.Services
 
         public async Task<bool> ValidateLicensePlate(int id)
         {
+            // Finds the vehicle by id
             var vehicle = _context.Vehicles.Find(id);
 
-
+            // Checks if the vehicle exists
             if (vehicle == null)
             {
                 throw new ArgumentException("Vehicle not found");
             }else {
+
+                // Configuring the API
                 var licensePlate = vehicle.LicensePlate;
                 var client = new RestClient("https://opendata.rdw.nl");
+
+                // Configuring the request
                 var request = new RestRequest($"/resource/m9d7-ebf2.json?kenteken={licensePlate}", Method.Get);
+
+                // Gets the response from the API
                 var response = await client.ExecuteAsync(request);
 
-                
-
-
+                // If the licence plate is found, return true
                 if (response.StatusCode == HttpStatusCode.OK)
                     {
                     return true;
