@@ -1,9 +1,10 @@
 using VehiclePark.Models;
 using Microsoft.EntityFrameworkCore;
+using VehiclePark.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddScoped<IVehicleService, VehicileService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
