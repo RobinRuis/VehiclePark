@@ -66,6 +66,22 @@ namespace VehiclePark.Controllers
             {
                 return BadRequest("Vehicle not found");
             }
-        }   
+        }
+
+        [HttpGet("{id}")]
+        [Description("Validates a license plate")]
+        public async Task<ActionResult> ValidateLicensePlate(int id)
+        {
+            var request = await _vehicleService.ValidateLicensePlate(id);
+
+            if (request)
+            {
+                return Ok("License plate is valid");
+            }
+            else
+            {
+                return BadRequest("License plate is not valid");
+            }
+        }
     }
 }

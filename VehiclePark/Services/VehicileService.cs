@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RestSharp;
+using System.Net;
 using VehiclePark.Models;
 
 namespace VehiclePark.Services
@@ -35,7 +37,7 @@ namespace VehiclePark.Services
                         {
                             new Vehicle
                             {
-                                LicensePlate = "HV-860-J",
+                                LicensePlate = "HV860J",
                                 Color = "Grey",
                                 BuildYear = 2016,
                                 LoanedTo = "",
@@ -45,7 +47,7 @@ namespace VehiclePark.Services
 
                             new Vehicle
                             {
-                                LicensePlate = "DS-432-X",
+                                LicensePlate = "DS432X",
                                 Color = "Zwart",
                                 BuildYear = 2010,
                                 LoanedTo = "",
@@ -55,7 +57,7 @@ namespace VehiclePark.Services
 
                             new Vehicle
                             {
-                                LicensePlate = "PS-729-W",
+                                LicensePlate = "PS729W",
                                 Color = "Red",
                                 BuildYear = 2006,
                                 LoanedTo = "",
@@ -144,9 +146,35 @@ namespace VehiclePark.Services
         }
 
 
-        public Task<Vehicle> ValidateLicensePlate(int id, Vehicle vehicle)
+        public async Task<bool> ValidateLicensePlate(int id)
         {
-            throw new NotImplementedException();
+            var vehicle = _context.Vehicles.Find(id);
+
+
+            if (vehicle == null)
+            {
+                throw new ArgumentException("Vehicle not found");
+            }else {
+                var licensePlate = vehicle.LicensePlate;
+                var client = new RestClient("https://opendata.rdw.nl");
+                var request = new RestRequest($"/resource/m9d7-ebf2.json?kenteken={licensePlate}", Method.Get);
+                var response = await client.ExecuteAsync(request);
+
+                
+
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+
+
         }
     }
 }
